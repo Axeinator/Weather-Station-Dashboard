@@ -10,67 +10,38 @@ html
   script(src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js')
   script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous")
   link(rel='stylesheet' href='main.css')
+  script(src='graphing.js')
 
-  body(onload='temperatureGraph(); console.log(chart)')
+  body(onload='temperatureGraphSetup(); humidityGraphSetup()')
 
   canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
-    
-  script.
-    var temps = !{JSON.stringify(temps)}
-    let xArray = []
-    temps.forEach(obs => xArray.push(new Date(obs.time)))
-    let yArray = []
-    temps.forEach(obs => yArray.push(obs.temperature))
-    function temperatureGraph() {
-      var ctx = document.getElementById('temperatureChart')
-      var data = {
-        labels: xArray,
-        datasets: [
-          {
-            label: 'Temperature',
-            pointBackgroundColor: "#ff2200",
-            backgroundColor: "rgba(255, 198, 133, 0.6)",
-            borderColor: "#ff6200",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: yArray
-          }
-        ]
-      }
-      chart = new Chart(ctx, {
-        type: 'line',
-        data: data,
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                min: 0,
-                max: 100,
-                stepSize: 10
-              }
-            }],
-            xAxes: [{
-              type: 'time',
-              time: {
-                unit: 'minute',
-              },
-              ticks: {
-                min: Date.now() - (86400 * 1000),
-                max: Date.now(),
-                maxTicksLimit: xArray.length / 15
+  input(type="text" class="js-range-slider" id="timeRange" name="timeRange")
+  canvas(class='graph' id='humidityChart' width='50%' height='50vh')
 
-              }
-            }]
-          },
-          maintainAspectRatio: false,
-          responsive: true
-        }
-      });
+  script.
+    function temperatureGraphSetup() {
+      var temps = !{JSON.stringify(temps)}
+      let xArray = []
+      temps.forEach(obs => xArray.push(new Date(obs.time)))
+      let yArray = []
+      temps.forEach(obs => yArray.push(obs.temperature))
+      tempChart = temperatureGraph(xArray, yArray)
+    }
+    function humidityGraphSetup() {
+      var humidity = !{JSON.stringify(humidities)}
+      console.log(humidity)
+      let xArray = []
+      humidity.forEach(obs => xArray.push(new Date(obs.time)))
+      console.log(xArray)
+      console.log(xArray.length)
+      let yArray = []
+      humidity.forEach(obs => yArray.push(obs.humidity))
+      console.log(yArray)
+      humChart = humidityGraph(xArray, yArray)
     }
 
 
-input(type="text" class="js-range-slider" id="timeRange" name="timeRange")
+
 
 script.
     var slider = document.getElementById('timeRange')
@@ -83,9 +54,12 @@ script.
       to: 24,
       min_interval: 1,
       onChange: function (data) {
-          chart.options.scales.xAxes[0].ticks.min = Date.now() - ((24-data.from)*60*60)*1000
-          chart.options.scales.xAxes[0].ticks.max = Date.now() - ((24-data.to)*60*60)*1000
-          chart.update()
+          tempChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24-data.from)*60*60)*1000
+          tempChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24-data.to)*60*60)*1000
+          humChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
+          humChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
+          tempChart.update()
+          humChart.update()
 
       }
     })

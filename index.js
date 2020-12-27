@@ -8,9 +8,21 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/', (req, res) => {
-  var stats = data.temperature(result => res.render('res',{temps: result}))
-});
+    stats = []
+    data.temperature(result => {
+        stats.push(result)
+        data.humidity(result => {
+            stats.push(result)
+            res.render('res', {
+                temps: stats[0],
+                humidities: stats[1]
+            });
+        })
+    })
+
+
+})
 
 app.listen(PORT, () => {
-  console.log('server started on port ' + PORT);
+    console.log('server started on port ' + PORT);
 });

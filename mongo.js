@@ -34,4 +34,5 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function(err, client) {
 });
 }
 
+
 module.exports = { temperature, humidity }

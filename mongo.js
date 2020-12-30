@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-const uri = 'mongodb+srv://station:dA9sQSH7Y0wRd5CT@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority'
+const uri = 'mongodb+srv://graphs:E1vfhZPFqeuoadgv@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority'
 
 const prev24 = new Date(Date.now() - 86400000)
 const query = {time: {$gte: prev24}}
@@ -33,6 +33,20 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function(err, client) {
   });
 });
 }
+function latest(done) {
+  MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
+    let options = {sort: {time: -1}}
 
+    if (err) throw err;
+    let weather = client.db('weather')
 
-module.exports = { temperature, humidity }
+    weather.collection('data').find(query, options).limit(1).toArray(function (err, result) {
+      if (err) throw err;
+      client.close()
+      done(result)
+
+    })
+  })
+}
+
+module.exports = { temperature, humidity, latest }

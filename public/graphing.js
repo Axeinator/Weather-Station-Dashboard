@@ -19,9 +19,8 @@ function temperatureGraph(xArray, yArray) {
       scales: {
         yAxes: [{
           ticks: {
-            min: 0,
-            max: 100,
-            stepSize: 10
+            min: 30,
+            stepSize: 5
           }
         }],
         xAxes: [{
@@ -38,7 +37,18 @@ function temperatureGraph(xArray, yArray) {
         }]
       },
       maintainAspectRatio: false,
-      responsive: true
+      responsive: true,
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            let label = data.datasets[tooltipItem.datasetIndex].label
+            label += ": "
+            label += Math.round(tooltipItem.value * 10) / 10
+            label += "°F"
+            return label;
+          }
+        }
+      }
     }
   });
   return chart;
@@ -67,7 +77,7 @@ function humidityGraph(xArray, yArray) {
           ticks: {
             min: 0,
             max: 100,
-            stepSize: 10
+            stepSize: 5
           }
         }],
         xAxes: [{
@@ -84,7 +94,18 @@ function humidityGraph(xArray, yArray) {
         }]
       },
       maintainAspectRatio: false,
-      responsive: true
+      responsive: true,
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            let label = data.datasets[tooltipItem.datasetIndex].label
+            label += ": "
+            label += Math.round(tooltipItem.value * 10) / 10
+            label += "%"
+            return label;
+          }
+        }
+      }
     }
   });
   return chart;

@@ -33,6 +33,20 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function(err, client) {
   });
 });
 }
+function latest(done) {
+  MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
+    let options = {sort: {time: -1}}
 
+    if (err) throw err;
+    let weather = client.db('weather')
 
-module.exports = { temperature, humidity }
+    weather.collection('data').find(query, options).limit(1).toArray(function (err, result) {
+      if (err) throw err;
+      client.close()
+      done(result)
+
+    })
+  })
+}
+
+module.exports = { temperature, humidity, latest }

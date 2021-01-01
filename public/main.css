@@ -1,5 +1,5 @@
 body {
-  margin: 60px;
+  margin: 60px!important;
 }
 .graph {
   max-width: 100%
@@ -30,4 +30,9 @@ h1, h2, h3, h4 {
 p {
   text-align: center;
   margin: 20px;
+}
+img, figcaption {
+  margin: 20px auto;
+  display: block;
+  text-align: center;
 }

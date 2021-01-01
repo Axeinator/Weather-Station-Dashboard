@@ -1,7 +1,6 @@
 const express = require('express');
 const data = require('./mongo')
 const path = require('path');
-const https = require('https')
 const app = express();
 const PORT = process.env.PORT || 8081
 

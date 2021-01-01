@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+html
+head
+  link(rel="stylesheet" href="main.css")
+  link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous")
+  script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous")
+title='Weather Station'
+
+body
+  div(class='container-sm')
+    h1 Weather Station - Houston, TX
+    p(class="lead" style='font-size: xx-large')
+      | See the latest weather in Houston, TX, just click below to access our charts page.
+      | Want to learn more about our station? Read on!
+
+    div(class='row justify-content-center')
+      button(class='btn btn-lg btn-primary' style='width: 30%; font-size: x-large;'
+      onclick="window.location.href='/'") View Charts
+
+    h2 Station Details
+    p(style='font-size: x-large; text-align: left')
+      | The station is currently using a Raspberry Pi 3B+ to connect to the sensors.
+      | Since the 3B+ has 40 GPIO pins, it is easy to connect many different sensors to it.
+      | Currently, I am using a DHT11 temperature and humidity sensor to capture readings every 2 minutes.
+      | It is in a plastic box with holes drilled in it to allow the power cable to enter, and the station to
+      | be exposed to the surrounding air.
+      br
+      br
+      | The Raspberry Pi is running a Python program which handles all the
+      | sensors and sends their readings to a database. The program requests
+      | a reading from all the sensors every 2 minutes.
+      | The database I chose to use was MongoDB, a cloud database that offers 512 MB of free storage.
+      | Since MongoDB is a cloud database, even if the Raspberry Pi goes offline or fails, all the previous readings
+      | will still be stored in the database.
+      figure
+        img(src='images/sampleObjects.png' width='50%')
+        figcaption An example of the database objects
+    p(style='font-size: x-large; text-align: left')
+      | Along with the Python code, this website is built using the Express framework
+      | for Node.js. The graphs are made with Charts.js and the embeds are directly from
+      | MongoDB Charts.

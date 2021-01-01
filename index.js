@@ -7,24 +7,31 @@ const PORT = process.env.PORT || 8081
 app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '/public')));
 app.use('/favicon.ico', express.static('public/favicon.ico'))
-
-app.get('/info', (req, res) => {
-    res.render('info')
-})
-
+// TODO Try to open a port on the RPi that can pull a fresh reading, then map this to a button
+// and perform the request server side
 app.get('/', (req, res) => {
-    Promise.all([data.temperature, data.humidity, data.latest])
-        .then(result => {
-            res.render('charts', {
-                temps: result[0],
-                humidities: result[1],
-                current: result[2]
+    stats = []
+    data.temperature(result => {
+        stats.push(result)
+        data.humidity(result => {
+            stats.push(result)
+            currentConditions = data.latest(result => {
+                stats.push(result)
+                res.render('res', {
+                    temps: stats[0],
+                    humidities: stats[1],
+                    current: stats[2]
+                });
             })
         })
+    })
 })
+
 app.get('/currentConditions', (req, res) => {
-    data.latest
-        .then(result => res.json(result))
+    data.latest(result => {
+            res.json(result)
+        }
+    )
 })
 
 app.listen(PORT, () => {

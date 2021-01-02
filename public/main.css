@@ -36,3 +36,9 @@ img, figcaption {
   display: block;
   text-align: center;
 }
+.js-irs-1 > .irs-bar {
+  background: linear-gradient(red, orange)!important;
+}
+.js-irs-0 > .irs-bar {
+  background: linear-gradient(lightgreen, dodgerblue)!important;
+}

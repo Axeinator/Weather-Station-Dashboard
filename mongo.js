@@ -8,7 +8,7 @@ async function temperature() {
     let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
     await client.connect()
 
-    let options = {projection: {_id: 0, temperature: 1, time: 1}}
+    let options = {projection: {_id: 0, humidity: 0}}
 
 
     let weather = client.db('weather');
@@ -27,7 +27,7 @@ async function humidity() {
     let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
     await client.connect()
 
-    let options = {projection: {_id: 0, humidity: 1, time: 1}}
+    let options = {projection: {_id: 0, temperature: 0}}
 
 
     let weather = client.db('weather');
@@ -47,7 +47,10 @@ async function latest() {
     let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
     await client.connect()
 
-    let options = {sort: {time: -1}}
+    let options = {
+        sort: {time: -1},
+        projection: {_id: 0}
+    }
     let weather = client.db('weather')
 
     let cursor = weather.collection('data')

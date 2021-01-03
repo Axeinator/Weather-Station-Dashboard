@@ -4,50 +4,64 @@ const uri = 'mongodb+srv://mongoCredentials@main.kc4dw.mongodb.net/weather?retry
 const prev24 = new Date(Date.now() - 86400000)
 const query = {time: {$gte: prev24}}
 
-function temperature(done) {
-  MongoClient.connect(uri, {useUnifiedTopology: true}, function (err, client) {
+async function temperature() {
+    let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
+    await client.connect()
+
     let options = {projection: {_id: 0, temperature: 1, time: 1}}
 
-    if (err) throw err;
+
     let weather = client.db('weather');
 
-    weather.collection('data').find(query, options).toArray(function (err, result) {
-      if (err) throw err;
-      client.close();
-      done(result)
-    });
-  });
+    let cursor = weather.collection('data')
+        .find(query, options)
+
+    let results = await cursor.toArray()
+
+    await client.close()
+
+    return results
 }
 
-function humidity(done) {
-  MongoClient.connect(uri, {useUnifiedTopology: true}, function (err, client) {
+async function humidity() {
+    let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
+    await client.connect()
+
     let options = {projection: {_id: 0, humidity: 1, time: 1}}
 
-    if (err) throw err;
+
     let weather = client.db('weather');
 
-    weather.collection('data').find(query, options).toArray(function (err, result) {
-      if (err) throw err;
-      client.close();
-      done(result)
-    });
-  });
+    let cursor = weather.collection('data')
+        .find(query, options)
+
+    let results = await cursor.toArray()
+
+    await client.close()
+
+    return results
+
 }
 
-function latest(done) {
-  MongoClient.connect(uri, {useUnifiedTopology: true}, function (err, client) {
-    let options = {sort: {time: -1}}
+async function latest() {
+    let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
+    await client.connect()
 
-    if (err) throw err;
+    let options = {sort: {time: -1}}
     let weather = client.db('weather')
 
-    weather.collection('data').find(query, options).limit(1).toArray(function (err, result) {
-      if (err) throw err;
-      client.close()
-      done(result)
+    let cursor = weather.collection('data')
+        .find(query, options)
+        .limit(1)
 
-    })
-  })
+    let results = await cursor.toArray()
+
+    await client.close()
+
+    return results
+
+
 }
+
 
 module.exports = {temperature, humidity, latest}

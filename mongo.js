@@ -1,51 +1,59 @@
-const { MongoClient } = require("mongodb");
+const {MongoClient} = require("mongodb");
 const uri = 'mongodb+srv://mongoCredentials@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority'
 
 const prev24 = new Date(Date.now() - 86400000)
 const query = {time: {$gte: prev24}}
 
-function temperature(done) {
-MongoClient.connect(uri, { useUnifiedTopology: true }, function(err, client) {
-  let options = {projection: {_id:0, temperature: 1, time: 1}}
+const temperature = new Promise((resolve, reject) => {
+    MongoClient.connect(uri, {useUnifiedTopology: true}, function (err, client) {
+        let options = {projection: {_id: 0, temperature: 1, time: 1}}
 
-  if (err) throw err;
-  let weather = client.db('weather');
-  
-  weather.collection('data').find(query, options).toArray(function(err, result) {
-    if (err) throw err;
-    client.close();
-    done(result)
-  });
+        if (err) throw err;
+        let weather = client.db('weather');
+        weather.collection('data').find(query, options).toArray(function (err, result) {
+            client.close();
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result)
+            }
+        })
+    })
+})
+
+const humidity = new Promise((resolve, reject) => {
+    MongoClient.connect(uri, {useUnifiedTopology: true}, function (err, client) {
+        let options = {projection: {_id: 0, humidity: 1, time: 1}}
+
+        if (err) throw err;
+        let weather = client.db('weather');
+
+        weather.collection('data').find(query, options).toArray(function (err, result) {
+            client.close();
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result)
+            }
+        })
+    });
 });
-}
 
-function humidity(done) {
-MongoClient.connect(uri, { useUnifiedTopology: true }, function(err, client) {
-  let options = {projection: {_id:0, humidity: 1, time: 1}}
+const latest = new Promise((resolve, reject) => {
+    MongoClient.connect(uri, {useUnifiedTopology: true}, function (err, client) {
+        if (err) throw err;
+        let weather = client.db('weather')
 
-  if (err) throw err;
-  let weather = client.db('weather');
-  
-  weather.collection('data').find(query, options).toArray(function(err, result) {
-    if (err) throw err;
-    client.close();
-    done(result)
-  });
-});
-}
-function latest(done) {
-  MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
-
-    if (err) throw err;
-    let weather = client.db('weather')
-
-    weather.collection('data').find().sort({_id: -1}).limit(1).project({_id: 0}).toArray(function (err, result) {
-      if (err) throw err;
-      client.close()
-      done(result)
+        weather.collection('data').find().sort({_id: -1}).limit(1).project({_id: 0}).toArray(function (err, result) {
+            client.close();
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result)
+            }
+        });
 
     })
-  })
-}
+})
 
-module.exports = { temperature, humidity, latest }
+module.exports = {temperature, humidity, latest}

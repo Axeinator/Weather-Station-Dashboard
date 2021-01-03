@@ -42,3 +42,6 @@ img, figcaption {
 .js-irs-0 > .irs-bar {
   background: linear-gradient(lightgreen, dodgerblue)!important;
 }
+.form-check-label, .form-check-input {
+  font-size: x-large;
+}

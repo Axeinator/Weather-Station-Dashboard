@@ -1,4 +1,4 @@
-function temperatureGraph(xArray, yArray) {
+function temperatureGraph(xArray, yArray, suffix) {
   var ctx = document.getElementById('temperatureChart')
   var data = {
     labels: xArray,
@@ -41,7 +41,7 @@ function temperatureGraph(xArray, yArray) {
             let label = data.datasets[tooltipItem.datasetIndex].label
             label += ": "
             label += Math.round(tooltipItem.value * 10) / 10
-            label += "°F"
+            label += suffix
             return label;
           }
         }

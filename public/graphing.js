@@ -18,10 +18,7 @@ function temperatureGraph(xArray, yArray) {
     options: {
       scales: {
         yAxes: [{
-          ticks: {
-            min: 30,
-            stepSize: 5
-          }
+          ticks: {}
         }],
         xAxes: [{
           type: 'time',

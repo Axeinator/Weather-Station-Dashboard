@@ -15,9 +15,9 @@ app.get('/', (req, res) => {
         stats.push(result)
         data.humidity(result => {
             stats.push(result)
-            currentConditions = data.latest(result => {
+            data.latest(result => {
                 stats.push(result)
-                res.render('res', {
+                res.render('charts', {
                     temps: stats[0],
                     humidities: stats[1],
                     current: stats[2]
@@ -32,6 +32,10 @@ app.get('/currentConditions', (req, res) => {
             res.json(result)
         }
     )
+})
+
+app.get('/info', (req, res) => {
+   res.render('info')
 })
 
 app.listen(PORT, () => {

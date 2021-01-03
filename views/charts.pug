@@ -12,17 +12,25 @@ html
   link(rel='stylesheet' href='main.css')
   script(src='graphing.js')
 
-  body(onload='temperatureGraphSetup(); humidityGraphSetup(); createLatestTable(); latestReading();')
+  body(onload='farenOrCels(); humidityGraphSetup(); createLatestTable(); latestReading();')
   h1 Weather Station - Houston, TX
   h2 Current Conditions
   table(id='currentConditions' style="width: 50%")
   div(class='row justify-content-center')
     button(id='refreshCurrent' class='btn btn-primary btn-lg' onclick='updateCurrent()') Refresh Reading
     p(id='refreshPleaseWait' style='display: none') Please wait before refreshing the reading again.
-  //- TODO Instead of 24 hours, calculate the actual amount of time
-  h2 Temperature (°F)
+
+  h2 Temperature
   input(type="text" id="temperatureTimeRange" name="timeRange")
-  canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
+  div(class="form-check form-check-inline")
+    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="faren" value="Fahrenheit" onclick="temperatureGraphSetup()")
+    label(class="form-check-label" for="faren") Fahrenheit
+    br
+    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="cels" value="Celsius" onclick="temperatureGraphSetupCelsius()")
+    label(class="form-check-label" for="cels") Celsius
+
+canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
+
   h2 Relative Humidity
   input(type="text" id="humidityTimeRange" name="timeRange")
   canvas(class='graph' id='humidityChart' width='50%' height='50vh')
@@ -36,12 +44,46 @@ html
   h4 Want to learn more about how the station works? #[a(href='/info') Click here]
 
   script.
+    function farenOrCels() {
+      console.log("Running on load farencels")
+      console.log(`celsius storage onload: ${window.localStorage.getItem('celsius')}`)
+      if (window.localStorage.getItem('celsius') === 'true') { // the local storage is a string, not boolean
+        console.log("Now inside the if for farenorcels")
+        document.getElementById('cels').checked = true
+        temperatureGraphSetupCelsius()
+      }
+      else {
+        console.log(`celsius storage in else: ${window.localStorage.getItem('celsius')}`)
+        console.log("Now inside the else for farenorcels")
+        document.getElementById('faren').checked = true
+        temperatureGraphSetup()
+      }
+
+    }
+    function toCelsius(temp) {
+      return (temp - 32) * (5/9)
+    }
     function temperatureGraphSetup() {
+      window.localStorage.setItem('celsius', false)
+      console.log("Running the faren setup function")
+      console.log("set to faren")
+      console.log(`after setting to faren: ${window.localStorage.getItem('celsius')}`)
       const temps = !{JSON.stringify(temps)}
       let xArray = []
       temps.forEach(obs => xArray.push(new Date(obs.time)))
       let yArray = []
       temps.forEach(obs => yArray.push(obs.temperature))
+      tempChart = temperatureGraph(xArray, yArray)
+    }
+    function temperatureGraphSetupCelsius() {
+      window.localStorage.setItem('celsius', true)
+      console.log("set to cels")
+      console.log(`after setting to cels: ${window.localStorage.getItem('celsius')}`)
+      const temps = !{JSON.stringify(temps)}
+      let xArray = []
+      temps.forEach(obs => xArray.push(new Date(obs.time)))
+      let yArray = []
+      temps.forEach(obs => yArray.push(toCelsius(obs.temperature)))
       tempChart = temperatureGraph(xArray, yArray)
     }
     function humidityGraphSetup() {

@@ -8,7 +8,7 @@ function temperatureGraphSetup(temps) {
     temps.forEach(obs => xArray.push(new Date(obs.time)))
     let yArray = []
     temps.forEach(obs => yArray.push(obs.temperature))
-    tempChart = temperatureGraph(xArray, yArray)
+    tempChart = temperatureGraph(xArray, yArray, "°F")
     return tempChart
 }
 
@@ -18,7 +18,7 @@ function temperatureGraphSetupCelsius(temps) {
     temps.forEach(obs => xArray.push(new Date(obs.time)))
     let yArray = []
     temps.forEach(obs => yArray.push(toCelsius(obs.temperature)))
-    tempChart = temperatureGraph(xArray, yArray)
+    tempChart = temperatureGraph(xArray, yArray, "°C")
     return tempChart
 }
 

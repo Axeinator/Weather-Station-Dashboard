@@ -10,9 +10,10 @@ html
   script(src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js')
   script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous" defer)
   link(rel='stylesheet' href='main.css')
-  script(src='graphing.js')
+  script(src='graphing.js' defer)
+  script(src='graphSetup.js' defer)
 
-  body(onload='farenOrCels(); humidityGraphSetup(); createLatestTable(); latestReading();')
+  body
   h1 Weather Station - Houston, TX
   h2 Current Conditions
   table(id='currentConditions' style="width: 50%")
@@ -23,13 +24,13 @@ html
   h2 Temperature
   input(type="text" id="temperatureTimeRange" name="timeRange")
   div(class="form-check form-check-inline")
-    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="faren" value="Fahrenheit" onclick="temperatureGraphSetup()")
+    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="faren" value="Fahrenheit")
     label(class="form-check-label" for="faren") Fahrenheit
     br
-    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="cels" value="Celsius" onclick="temperatureGraphSetupCelsius()")
+    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="cels" value="Celsius")
     label(class="form-check-label" for="cels") Celsius
 
-canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
+  canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
 
   h2 Relative Humidity
   input(type="text" id="humidityTimeRange" name="timeRange")
@@ -43,75 +44,42 @@ canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
 
   h4 Want to learn more about how the station works? #[a(href='/info') Click here]
 
-  script.
-    function farenOrCels() {
-      console.log("Running on load farencels")
-      console.log(`celsius storage onload: ${window.localStorage.getItem('celsius')}`)
-      if (window.localStorage.getItem('celsius') === 'true') { // the local storage is a string, not boolean
-        console.log("Now inside the if for farenorcels")
+script.
+    window.onload = () => {
+      createLatestTable();
+      if (window.localStorage.getItem('celsius') === 'true') {
         document.getElementById('cels').checked = true
-        temperatureGraphSetupCelsius()
+        tempChart = temperatureGraphSetupCelsius(!{JSON.stringify(temps)});
+        latestReading(true)
       }
       else {
-        console.log(`celsius storage in else: ${window.localStorage.getItem('celsius')}`)
-        console.log("Now inside the else for farenorcels")
         document.getElementById('faren').checked = true
-        temperatureGraphSetup()
+        tempChart = temperatureGraphSetup(!{JSON.stringify(temps)})
+        latestReading(false)
       }
+      humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
+    }
 
-    }
-    function toCelsius(temp) {
-      return (temp - 32) * (5/9)
-    }
-    function temperatureGraphSetup() {
-      window.localStorage.setItem('celsius', false)
-      console.log("Running the faren setup function")
-      console.log("set to faren")
-      console.log(`after setting to faren: ${window.localStorage.getItem('celsius')}`)
-      const temps = !{JSON.stringify(temps)}
-      let xArray = []
-      temps.forEach(obs => xArray.push(new Date(obs.time)))
-      let yArray = []
-      temps.forEach(obs => yArray.push(obs.temperature))
-      tempChart = temperatureGraph(xArray, yArray)
-    }
-    function temperatureGraphSetupCelsius() {
-      window.localStorage.setItem('celsius', true)
-      console.log("set to cels")
-      console.log(`after setting to cels: ${window.localStorage.getItem('celsius')}`)
-      const temps = !{JSON.stringify(temps)}
-      let xArray = []
-      temps.forEach(obs => xArray.push(new Date(obs.time)))
-      let yArray = []
-      temps.forEach(obs => yArray.push(toCelsius(obs.temperature)))
-      tempChart = temperatureGraph(xArray, yArray)
-    }
-    function humidityGraphSetup() {
-      const humidity = !{JSON.stringify(humidities)}
-      let xArray = []
-      humidity.forEach(obs => xArray.push(new Date(obs.time)))
-      let yArray = []
-      humidity.forEach(obs => yArray.push(obs.humidity))
-      humChart = humidityGraph(xArray, yArray)
-    }
-    function createLatestTable() {
-      currentStatsTable = document.getElementById('currentConditions')
-      currentTime = currentStatsTable.insertRow().insertCell(0)
-      currentTemperature = currentStatsTable.insertRow().insertCell(0)
-      currentHumidity = currentStatsTable.insertRow().insertCell(0)
+    document.getElementById('faren').addEventListener('click', () => {
+      latestReading(false)
+      temperatureGraphSetup(!{JSON.stringify(temps)})
+    })
+    document.getElementById('cels').addEventListener('click', () => {
+      latestReading(true)
+      temperatureGraphSetupCelsius(!{JSON.stringify(temps)})
+    })
 
-    }
-    function latestReading(reading = !{JSON.stringify(current)}) {
-
+    function latestReading(celsius, reading = !{JSON.stringify(current)}) {
       currentTime.innerHTML = new Date(reading[0].time).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})
-      currentTemperature.innerHTML = (reading[0].temperature.toFixed(1).toString() + "°F")
+      if (celsius) {
+        currentTemperature.innerHTML = (toCelsius(reading[0].temperature).toFixed(1).toString() + "°C")
+      }
+      else {
+        currentTemperature.innerHTML = (reading[0].temperature.toFixed(1).toString() + "°F")
+      }
       currentHumidity.innerHTML = (reading[0].humidity.toFixed(1).toString() + "%")
     }
 
-
-
-
-script.
     var humiditySlider = document.getElementById('humidityTimeRange')
     $("#humidityTimeRange").ionRangeSlider({
       skin: 'big',
@@ -145,11 +113,24 @@ script.
       }
     })
 script.
+  function createLatestTable() {
+    currentStatsTable = document.getElementById('currentConditions')
+    currentTime = currentStatsTable.insertRow().insertCell(0)
+    currentTemperature = currentStatsTable.insertRow().insertCell(0)
+    currentHumidity = currentStatsTable.insertRow().insertCell(0)
+
+  }
+
   function updateCurrent () {
     let xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
       if (this.readyState === 4 && this.status === 200) {
-        latestReading(JSON.parse(this.responseText))
+        if (window.localStorage.getItem('celsius') === 'true') {
+          latestReading(true, JSON.parse(this.responseText))
+        }
+        else {
+          latestReading(false, JSON.parse(this.responseText))
+        }
         document.getElementById('refreshCurrent').disabled = true
         document.getElementById('refreshPleaseWait').style.display = 'block'
         setTimeout(() => {

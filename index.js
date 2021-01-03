@@ -14,28 +14,18 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    stats = []
-    data.temperature(result => {
-        stats.push(result)
-        data.humidity(result => {
-            stats.push(result)
-            currentConditions = data.latest(result => {
-                stats.push(result)
-                res.render('charts', {
-                    temps: stats[0],
-                    humidities: stats[1],
-                    current: stats[2]
-                });
+    Promise.all([data.temperature, data.humidity, data.latest])
+        .then(result => {
+            res.render('charts', {
+                temps: result[0],
+                humidities: result[1],
+                current: result[2]
             })
         })
-    })
 })
-
 app.get('/currentConditions', (req, res) => {
-    data.latest(result => {
-            res.json(result)
-        }
-    )
+    data.latest
+        .then(result => res.json(result))
 })
 
 app.listen(PORT, () => {

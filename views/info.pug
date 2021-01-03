@@ -24,8 +24,14 @@ body
       | Currently, I am using a DHT11 temperature and humidity sensor to capture readings every 2 minutes.
       | It is in a plastic box with holes drilled in it to allow the power cable to enter, and the station to
       | be exposed to the surrounding air.
+      div(class='row')
+        div(class='col-sm')
+          img(src='images/station1.jpg' width='90%')
+        div(class='col-sm')
+          img(src='images/station2.jpg' width='90%')
       br
       br
+    p(style='font-size: x-large; text-align: left')
       | The Raspberry Pi is running a Python program which handles all the
       | sensors and sends their readings to a database. The program requests
       | a reading from all the sensors every 2 minutes.

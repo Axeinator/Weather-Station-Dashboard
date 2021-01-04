@@ -5,8 +5,8 @@ describe('MongoDB Connection', () => {
         return mongo.latest()
             .then(data => {
                 expect(data).toBeTruthy()
-                let time = new Date(data[0]['time'])
-                expect(Date.parse(time)).toBeGreaterThanOrEqual(new Date - 60*60*10*1000) // within last 10 min
+                let time = Date.parse(data[0]['time'])
+                expect(time).toBeGreaterThanOrEqual(new Date - 60*60*10*1000) // within last 10 min
             })
     })
 

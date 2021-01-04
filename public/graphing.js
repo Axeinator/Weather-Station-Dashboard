@@ -1,6 +1,6 @@
 function temperatureGraph(xArray, yArray, suffix) {
-  var ctx = document.getElementById('temperatureChart')
-  var data = {
+  let ctx = document.getElementById('temperatureChart')
+  let data = {
     labels: xArray,
     datasets: [
       {
@@ -12,7 +12,7 @@ function temperatureGraph(xArray, yArray, suffix) {
       }
     ]
   }
-  chart = new Chart(ctx, {
+  return new Chart(ctx, {
     type: 'line',
     data: data,
     options: {
@@ -26,9 +26,9 @@ function temperatureGraph(xArray, yArray, suffix) {
             unit: 'minute',
           },
           ticks: {
-            min: Date.now() - (86400*1000),
+            min: Date.now() - (86400 * 1000),
             max: Date.now(),
-            maxTicksLimit: xArray.length/15
+            maxTicksLimit: xArray.length / 15
 
           }
         }]
@@ -48,12 +48,11 @@ function temperatureGraph(xArray, yArray, suffix) {
       }
     }
   });
-  return chart;
 }
 
 function humidityGraph(xArray, yArray) {
-  var ctx = document.getElementById('humidityChart')
-  var data = {
+  let ctx = document.getElementById('humidityChart');
+  let data = {
     labels: xArray,
     datasets: [
       {
@@ -64,8 +63,8 @@ function humidityGraph(xArray, yArray) {
         data: yArray
       }
     ]
-  }
-  chart = new Chart(ctx, {
+  };
+  return new Chart(ctx, {
     type: 'line',
     data: data,
     options: {
@@ -105,5 +104,4 @@ function humidityGraph(xArray, yArray) {
       }
     }
   });
-  return chart;
 }

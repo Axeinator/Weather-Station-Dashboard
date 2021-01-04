@@ -1,8 +1,6 @@
 function toCelsius(temp) {
     return (temp - 32) * (5/9)
 }
-//FIXME Reset sliders when switching units, this should fix the 
-//glitch with mouse hover on readings as well
 function temperatureGraphSetup(temps) {
     window.localStorage.setItem('celsius', 'false')
     let xArray = []

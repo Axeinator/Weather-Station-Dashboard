@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "eslint": "^7.17.0",
     "express": "^4.17.1",
     "mongodb": "^3.6.3",
     "pug": "^3.0.0"
@@ -16,6 +17,7 @@
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
-    ]
+    ],
+    "verbose": true
   }
 }

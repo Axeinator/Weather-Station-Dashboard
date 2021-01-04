@@ -62,14 +62,18 @@ script.
     }
 
     document.getElementById('faren').addEventListener('click', () => {
+        temperatureSlider.reset()
+        delete tempChart
         latestReading(false)
-        temperatureGraphSetup(!{JSON.stringify(temps)})
+        tempChart = temperatureGraphSetup(!{JSON.stringify(temps)})
         document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=60f9f7ba-8ee0-4da3-8052-08ec503d959d&theme=ligh"
         document.getElementById('daily').src = "url"
     })
     document.getElementById('cels').addEventListener('click', () => {
+        temperatureSlider.reset()
+        delete tempChart
         latestReading(true)
-        temperatureGraphSetupCelsius(!{JSON.stringify(temps)})
+        tempChart = temperatureGraphSetupCelsius(!{JSON.stringify(temps)})
         document.getElementById('hourly').src = "url"
         document.getElementById('daily').src = "url"
 
@@ -101,7 +105,6 @@ script.
 
         }
     })
-    var temperatureSlider = document.getElementById('temperatureTimeRange')
     $("#temperatureTimeRange").ionRangeSlider({
         skin: 'big',
         type: 'double',
@@ -117,6 +120,7 @@ script.
 
         }
     })
+    var temperatureSlider = $("#temperatureTimeRange").data("ionRangeSlider")
 script.
     function createLatestTable() {
         currentStatsTable = document.getElementById('currentConditions')

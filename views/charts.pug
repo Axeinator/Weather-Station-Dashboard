@@ -1,145 +1,149 @@
-html 
-  head
+html
+    head
 
-  title= 'Weather Station'
-  link(rel='stylesheet' href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-  crossorigin="anonymous")
-  link(rel='stylesheet'
-  href='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css')
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js')
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous" defer)
-  link(rel='stylesheet' href='main.css')
-  script(src='graphing.js' defer)
-  script(src='graphSetup.js' defer)
+    title= 'Weather Station'
+    link(rel='stylesheet' href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+        crossorigin="anonymous")
+    link(rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous" defer)
+    link(rel='stylesheet' href='main.css')
+    script(src='graphing.js' defer)
+    script(src='graphSetup.js' defer)
 
-  body
-  h1 Weather Station - Houston, TX
-  h2 Current Conditions
-  table(id='currentConditions' style="width: 50%")
-  div(class='row justify-content-center')
-    button(id='refreshCurrent' class='btn btn-primary btn-lg' onclick='updateCurrent()') Refresh Reading
-    p(id='refreshPleaseWait' style='display: none') Please wait before refreshing the reading again.
+    body
+    h1 Weather Station - Houston, TX
+    h2 Current Conditions
+    table(id='currentConditions' style="width: 50%")
+    div(class='row justify-content-center')
+        button(id='refreshCurrent' class='btn btn-primary btn-lg' onclick='updateCurrent()') Refresh Reading
+        p(id='refreshPleaseWait' style='display: none') Please wait before refreshing the reading again.
 
-  h2 Temperature
-  input(type="text" id="temperatureTimeRange" name="timeRange")
-  div(class="form-check form-check-inline" style="margin: 10px 45%")
-    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="faren" value="Fahrenheit")
-    label(class="form-check-label" for="faren") Fahrenheit
-    br
-    input(class="form-check-input" type="radio" name="inlineRadioOptions" id="cels" value="Celsius")
-    label(class="form-check-label" for="cels") Celsius
+    h2 Temperature
+    input(type="text" id="temperatureTimeRange" name="timeRange")
+    div(class="form-check form-check-inline" style="margin: 10px 45%")
+        input(class="form-check-input" type="radio" name="inlineRadioOptions" id="faren" value="Fahrenheit")
+        label(class="form-check-label" for="faren") Fahrenheit
+        br
+        input(class="form-check-input" type="radio" name="inlineRadioOptions" id="cels" value="Celsius")
+        label(class="form-check-label" for="cels") Celsius
 
-  canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
+    canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
 
-  h2 Relative Humidity
-  input(type="text" id="humidityTimeRange" name="timeRange")
-  canvas(class='graph' id='humidityChart' width='50%' height='50vh')
-  iframe(style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
-    width="100%" height="80%"
-    src="https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=60f9f7ba-8ee0-4da3-8052-08ec503d959d&theme=light")
-  iframe(style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
-    width="100%" height="80%"
-    src="https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=8bd5878e-f884-4095-bab2-86423d80efe5&theme=light")
+    h2 Relative Humidity
+    input(type="text" id="humidityTimeRange" name="timeRange")
+    canvas(class='graph' id='humidityChart' width='50%' height='50vh')
+    iframe(id='hourly' style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
+        width="100%" height="80%"
+        src="https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=60f9f7ba-8ee0-4da3-8052-08ec503d959d&theme=light")
+    iframe(id='daily' style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
+        width="100%" height="80%"
+        src="https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=8bd5878e-f884-4095-bab2-86423d80efe5&theme=light")
 
-  h4 Want to learn more about how the station works? #[a(href='/info') Click here]
+    h4 Want to learn more about how the station works? #[a(href='/info') Click here]
 
 script.
     window.onload = () => {
-      createLatestTable();
-      if (window.localStorage.getItem('celsius') === 'true') {
-        document.getElementById('cels').checked = true
-        tempChart = temperatureGraphSetupCelsius(!{JSON.stringify(temps)});
-        latestReading(true)
-      }
-      else {
-        document.getElementById('faren').checked = true
-        tempChart = temperatureGraphSetup(!{JSON.stringify(temps)})
-        latestReading(false)
-      }
-      humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
+        createLatestTable();
+        if (window.localStorage.getItem('celsius') === 'true') {
+            document.getElementById('cels').checked = true
+            tempChart = temperatureGraphSetupCelsius(!{JSON.stringify(temps)});
+            latestReading(true)
+            document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=4a3d784c-6c3a-48ab-8192-1dd90b7cc40a&theme=light"
+            document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=aa385c38-f6c6-41b5-8359-347afec16539&theme=light"
+        } else {
+            document.getElementById('faren').checked = true
+            tempChart = temperatureGraphSetup(!{JSON.stringify(temps)})
+            latestReading(false)
+        }
+        humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
     }
 
     document.getElementById('faren').addEventListener('click', () => {
-      latestReading(false)
-      temperatureGraphSetup(!{JSON.stringify(temps)})
+        latestReading(false)
+        temperatureGraphSetup(!{JSON.stringify(temps)})
+        document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=60f9f7ba-8ee0-4da3-8052-08ec503d959d&theme=ligh"
+        document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=8bd5878e-f884-4095-bab2-86423d80efe5&theme=light"
     })
     document.getElementById('cels').addEventListener('click', () => {
-      latestReading(true)
-      temperatureGraphSetupCelsius(!{JSON.stringify(temps)})
+        latestReading(true)
+        temperatureGraphSetupCelsius(!{JSON.stringify(temps)})
+        document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=4a3d784c-6c3a-48ab-8192-1dd90b7cc40a&theme=light"
+        document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=aa385c38-f6c6-41b5-8359-347afec16539&theme=light"
+
     })
 
     function latestReading(celsius, reading = !{JSON.stringify(current)}) {
-      currentTime.innerHTML = new Date(reading[0].time).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})
-      if (celsius) {
-        currentTemperature.innerHTML = (toCelsius(reading[0].temperature).toFixed(1).toString() + "°C")
-      }
-      else {
-        currentTemperature.innerHTML = (reading[0].temperature.toFixed(1).toString() + "°F")
-      }
-      currentHumidity.innerHTML = (reading[0].humidity.toFixed(1).toString() + "%")
+        currentTime.innerHTML = new Date(reading[0].time).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})
+        if (celsius) {
+            currentTemperature.innerHTML = (toCelsius(reading[0].temperature).toFixed(1).toString() + "°C")
+        } else {
+            currentTemperature.innerHTML = (reading[0].temperature.toFixed(1).toString() + "°F")
+        }
+        currentHumidity.innerHTML = (reading[0].humidity.toFixed(1).toString() + "%")
     }
 
     var humiditySlider = document.getElementById('humidityTimeRange')
     $("#humidityTimeRange").ionRangeSlider({
-      skin: 'big',
-      type: 'double',
-      min: 1,
-      max: 24,
-      from: 1,
-      to: 24,
-      min_interval: 1,
-      onChange: function (data) {
-          humChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
-          humChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
-          humChart.update()
+        skin: 'big',
+        type: 'double',
+        min: 1,
+        max: 24,
+        from: 1,
+        to: 24,
+        min_interval: 1,
+        onChange: function (data) {
+            humChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
+            humChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
+            humChart.update()
 
-      }
+        }
     })
     var temperatureSlider = document.getElementById('temperatureTimeRange')
     $("#temperatureTimeRange").ionRangeSlider({
-      skin: 'big',
-      type: 'double',
-      min: 1,
-      max: 24,
-      from: 1,
-      to: 24,
-      min_interval: 1,
-      onChange: function (data) {
-        tempChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
-        tempChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
-        tempChart.update()
+        skin: 'big',
+        type: 'double',
+        min: 1,
+        max: 24,
+        from: 1,
+        to: 24,
+        min_interval: 1,
+        onChange: function (data) {
+            tempChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
+            tempChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
+            tempChart.update()
 
-      }
+        }
     })
 script.
-  function createLatestTable() {
-    currentStatsTable = document.getElementById('currentConditions')
-    currentTime = currentStatsTable.insertRow().insertCell(0)
-    currentTemperature = currentStatsTable.insertRow().insertCell(0)
-    currentHumidity = currentStatsTable.insertRow().insertCell(0)
+    function createLatestTable() {
+        currentStatsTable = document.getElementById('currentConditions')
+        currentTime = currentStatsTable.insertRow().insertCell(0)
+        currentTemperature = currentStatsTable.insertRow().insertCell(0)
+        currentHumidity = currentStatsTable.insertRow().insertCell(0)
 
-  }
-
-  function updateCurrent () {
-    let xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = function () {
-      if (this.readyState === 4 && this.status === 200) {
-        if (window.localStorage.getItem('celsius') === 'true') {
-          latestReading(true, JSON.parse(this.responseText))
-        }
-        else {
-          latestReading(false, JSON.parse(this.responseText))
-        }
-        document.getElementById('refreshCurrent').disabled = true
-        document.getElementById('refreshPleaseWait').style.display = 'block'
-        setTimeout(() => {
-          document.getElementById('refreshCurrent').disabled = false
-          document.getElementById('refreshPleaseWait').style.display = 'none'
-        }, 30000)
-      }
     }
-      xhr.open('GET', 'currentConditions')
-      xhr.send()
-  }
+
+    function updateCurrent() {
+        let xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                if (window.localStorage.getItem('celsius') === 'true') {
+                    latestReading(true, JSON.parse(this.responseText))
+                } else {
+                    latestReading(false, JSON.parse(this.responseText))
+                }
+                document.getElementById('refreshCurrent').disabled = true
+                document.getElementById('refreshPleaseWait').style.display = 'block'
+                setTimeout(() => {
+                    document.getElementById('refreshCurrent').disabled = false
+                    document.getElementById('refreshPleaseWait').style.display = 'none'
+                }, 30000)
+            }
+        }
+        xhr.open('GET', 'currentConditions')
+        xhr.send()
+    }
 

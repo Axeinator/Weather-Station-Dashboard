@@ -2,7 +2,6 @@ const express = require('express');
 const data = require('./mongo')
 const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 8081
 
 app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '/public')));
@@ -25,6 +24,4 @@ app.get('/info', (req, res) => {
     res.render('info')
 })
 
-app.listen(PORT, () => {
-    console.log('server started on port ' + PORT);
-});
+module.exports = app

@@ -10,5 +10,10 @@ describe('Web Server', () => {
         let response = await request(app).get('/info')
         expect(response.statusCode).toBe(200)
     })
-      //TODO current info page check if time is in correct range (8 min ish)
+    it('Gets the current details page and verifies reading time', async () => {
+        let response = await request(app).get('/currentConditions')
+        expect(response.statusCode).toBe(200)
+        let time = Date.parse(response.body[0]['time'])
+        expect(time).toBeGreaterThanOrEqual(new Date - 60*60*10*1000) // within last 10 min
+    })
 })

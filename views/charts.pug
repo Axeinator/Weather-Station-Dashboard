@@ -70,6 +70,7 @@ script.
         document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=8bd5878e-f884-4095-bab2-86423d80efe5&theme=light"
         window.localStorage.setItem('celsius', 'false')
     })
+    //FIXME Suffix is broken
     document.getElementById('cels').addEventListener('click', () => {
         temperatureSlider.reset()
         delete tempChart

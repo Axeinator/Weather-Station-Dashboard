@@ -1,5 +1,5 @@
 const {MongoClient} = require("mongodb");
-const creds = process.env.MONGOCREDENTIALS
+const creds = process.env.MONGO
 const uri = `mongodb+srv://${creds}@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority`
 
 const prev24 = new Date(Date.now() - 86400000)

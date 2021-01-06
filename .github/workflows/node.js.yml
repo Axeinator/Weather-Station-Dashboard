@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:  
-        MONGOCREDENTIALS: ${{ secrets.MONGOCREDENTIALS }}
+        MONGO: ${{ secrets.MONGO }}
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x, 15.x]

@@ -49,13 +49,13 @@ script.
         createLatestTable();
         if (window.localStorage.getItem('celsius') === 'true') {
             document.getElementById('cels').checked = true
-            tempChart = temperatureGraphSetupCelsius(!{JSON.stringify(temps)});
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)});
             latestReading(true)
             document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=4a3d784c-6c3a-48ab-8192-1dd90b7cc40a&theme=light"
             document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=aa385c38-f6c6-41b5-8359-347afec16539&theme=light"
         } else {
             document.getElementById('faren').checked = true
-            tempChart = temperatureGraphSetup(!{JSON.stringify(temps)})
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)})
             latestReading(false)
         }
         humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
@@ -65,7 +65,7 @@ script.
         temperatureSlider.reset()
         delete tempChart
         latestReading(false)
-        tempChart = temperatureGraphSetup(!{JSON.stringify(temps)})
+        tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)})
         document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=60f9f7ba-8ee0-4da3-8052-08ec503d959d&theme=ligh"
         document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=8bd5878e-f884-4095-bab2-86423d80efe5&theme=light"
     })
@@ -73,7 +73,7 @@ script.
         temperatureSlider.reset()
         delete tempChart
         latestReading(true)
-        tempChart = temperatureGraphSetupCelsius(!{JSON.stringify(temps)})
+        tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)})
         document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=4a3d784c-6c3a-48ab-8192-1dd90b7cc40a&theme=light"
         document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=aa385c38-f6c6-41b5-8359-347afec16539&theme=light"
 

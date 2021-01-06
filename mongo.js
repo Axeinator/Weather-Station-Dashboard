@@ -6,7 +6,6 @@ const prev24 = new Date(Date.now() - 86400000)
 const query = {time: {$gte: prev24}}
 
 async function temperature() {
-    console.log(creds)
     let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
     await client.connect()
 

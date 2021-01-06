@@ -1,10 +1,12 @@
 const {MongoClient} = require("mongodb");
-const uri = 'mongodb+srv://mongoCredentials@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority'
+const creds = process.env.MONGOCREDENTIALS
+const uri = `mongodb+srv://${creds}@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority`
 
 const prev24 = new Date(Date.now() - 86400000)
 const query = {time: {$gte: prev24}}
 
 async function temperature() {
+    console.log(creds)
     let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
     await client.connect()
 

@@ -1,71 +1,66 @@
-const {MongoClient} = require("mongodb");
-const creds = process.env.MONGO
-const uri = `mongodb+srv://${creds}@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority`
+const { MongoClient } = require('mongodb');
 
-const prev24 = new Date(Date.now() - 86400000)
-const query = {time: {$gte: prev24}}
+const creds = process.env.MONGO;
+const uri = `mongodb+srv://${creds}@main.kc4dw.mongodb.net/weather?retryWrites=true&w=majority`;
+
+const prev24 = new Date(Date.now() - 86400000);
+const query = { time: { $gte: prev24 } };
 
 async function temperature() {
-    let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
-    await client.connect()
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  await client.connect();
 
-    let options = {projection: {_id: 0, humidity: 0}}
+  const options = { projection: { _id: 0, humidity: 0 } };
 
+  const weather = client.db('weather');
 
-    let weather = client.db('weather');
+  const cursor = weather.collection('data')
+    .find(query, options);
 
-    let cursor = weather.collection('data')
-        .find(query, options)
+  const results = await cursor.toArray();
 
-    let results = await cursor.toArray()
+  await client.close();
 
-    await client.close()
-
-    return results
+  return results;
 }
 
 async function humidity() {
-    let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
-    await client.connect()
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  await client.connect();
 
-    let options = {projection: {_id: 0, temperature: 0}}
+  const options = { projection: { _id: 0, temperature: 0 } };
 
+  const weather = client.db('weather');
 
-    let weather = client.db('weather');
+  const cursor = weather.collection('data')
+    .find(query, options);
 
-    let cursor = weather.collection('data')
-        .find(query, options)
+  const results = await cursor.toArray();
 
-    let results = await cursor.toArray()
+  await client.close();
 
-    await client.close()
-
-    return results
-
+  return results;
 }
 
 async function latest() {
-    let client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
-    await client.connect()
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  await client.connect();
 
-    let options = {
-        sort: {time: -1},
-        projection: {_id: 0}
-    }
-    let weather = client.db('weather')
+  const options = {
+    sort: { time: -1 },
+    projection: { _id: 0 },
+  };
+  const weather = client.db('weather');
 
-    let cursor = weather.collection('data')
-        .find(query, options)
-        .limit(1)
+  const cursor = weather.collection('data')
+    .find(query, options)
+    .limit(1);
 
-    let results = await cursor.toArray()
+  const results = await cursor.toArray();
 
-    await client.close()
+  await client.close();
 
-    return results
-
-
+  return results;
 }
 
-
-module.exports = {temperature, humidity, latest}
+module.exports = { temperature, humidity, latest };

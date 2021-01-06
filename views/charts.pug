@@ -68,6 +68,7 @@ script.
         tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)})
         document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=60f9f7ba-8ee0-4da3-8052-08ec503d959d&theme=ligh"
         document.getElementById('daily').src = "url"
+        window.localStorage.setItem('celsius', 'false')
     })
     document.getElementById('cels').addEventListener('click', () => {
         temperatureSlider.reset()
@@ -76,7 +77,7 @@ script.
         tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)})
         document.getElementById('hourly').src = "url"
         document.getElementById('daily').src = "url"
-
+        window.localStorage.setItem('celsius', 'true')
     })
 
     function latestReading(celsius, reading = !{JSON.stringify(current)}) {

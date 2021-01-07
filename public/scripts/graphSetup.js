@@ -1,16 +1,15 @@
-const { temperatureGraph, humidityGraph } = require('./graphing');
+/* eslint-disable no-undef, no-unused-vars */
 
 function toCelsius(temp) {
   return (temp - 32) * (5 / 9);
 }
 
-function temperatureGraphSetup(temps) {
-  window.localStorage.setItem('celsius', 'false');
+function temperatureGraphSetup(temps, suffix) {
   const xArray = [];
   temps.forEach((obs) => xArray.push(new Date(obs.time)));
   const yArray = [];
   temps.forEach((obs) => yArray.push(obs.temperature));
-  return temperatureGraph(xArray, yArray, '°F');
+  return temperatureGraph(xArray, yArray, suffix);
 }
 
 function humidityGraphSetup(humidity) {
@@ -20,5 +19,3 @@ function humidityGraphSetup(humidity) {
   humidity.forEach((obs) => yArray.push(obs.humidity));
   return humidityGraph(xArray, yArray);
 }
-
-module.exports = { toCelsius, temperatureGraphSetup, humidityGraphSetup };

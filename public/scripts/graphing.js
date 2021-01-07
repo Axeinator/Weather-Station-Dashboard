@@ -1,5 +1,4 @@
-const Chart = require('chart.js');
-
+/* eslint-disable no-undef, no-unused-vars  */
 function temperatureGraph(xArray, yArray, suffix) {
   const ctx = document.getElementById('temperatureChart');
   const data = {
@@ -107,5 +106,3 @@ function humidityGraph(xArray, yArray) {
     },
   });
 }
-
-module.exports = { temperatureGraph, humidityGraph };

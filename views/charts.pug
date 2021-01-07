@@ -10,8 +10,8 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js')
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous" defer)
     link(rel='stylesheet' href='main.css')
-    script(src='graphing.js' defer)
-    script(src='graphSetup.js' defer)
+    script(src='scripts/graphing.js' defer)
+    script(src='scripts/graphSetup.js' defer)
 
     body
     h1 Weather Station - Houston, TX
@@ -49,36 +49,45 @@ script.
         createLatestTable();
         if (window.localStorage.getItem('celsius') === 'true') {
             document.getElementById('cels').checked = true
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)});
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C");
             latestReading(true)
             document.getElementById('hourly').src = "url"
             document.getElementById('daily').src = "url"
         } else {
             document.getElementById('faren').checked = true
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)})
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F")
             latestReading(false)
         }
         humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
     }
 
     document.getElementById('faren').addEventListener('click', () => {
-        temperatureSlider.reset()
-        delete tempChart
-        latestReading(false)
-        tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)})
-        document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=60f9f7ba-8ee0-4da3-8052-08ec503d959d&theme=ligh"
-        document.getElementById('daily').src = "url"
-        window.localStorage.setItem('celsius', 'false')
+        try {
+            temperatureSlider.reset()
+            tempChart.destroy()
+            latestReading(false)
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F")
+            document.getElementById('hourly').src = "url"
+            document.getElementById('daily').src = "url"
+        }
+        finally {
+            window.localStorage.setItem('celsius', 'false')
+        }
     })
     //FIXME Suffix is broken
     document.getElementById('cels').addEventListener('click', () => {
-        temperatureSlider.reset()
-        delete tempChart
-        latestReading(true)
-        tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)})
-        document.getElementById('hourly').src = "url"
-        document.getElementById('daily').src = "url"
-        window.localStorage.setItem('celsius', 'true')
+        try {
+            temperatureSlider.reset()
+            tempChart.destroy()
+            latestReading(true)
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°C")
+            document.getElementById('hourly').src = "url"
+            document.getElementById('daily').src = "url"
+        }
+        finally {
+            window.localStorage.setItem('celsius', 'true')
+
+        }
     })
 
     function latestReading(celsius, reading = !{JSON.stringify(current)}) {

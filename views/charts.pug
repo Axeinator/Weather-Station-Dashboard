@@ -74,13 +74,12 @@ script.
             window.localStorage.setItem('celsius', 'false')
         }
     })
-    //FIXME Suffix is broken
     document.getElementById('cels').addEventListener('click', () => {
         try {
             temperatureSlider.reset()
             tempChart.destroy()
             latestReading(true)
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°C")
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C")
             document.getElementById('hourly').src = "url"
             document.getElementById('daily').src = "url"
         }

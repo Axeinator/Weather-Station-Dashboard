@@ -74,13 +74,12 @@ script.
             window.localStorage.setItem('celsius', 'false')
         }
     })
-    //FIXME Suffix is broken
     document.getElementById('cels').addEventListener('click', () => {
         try {
             temperatureSlider.reset()
             tempChart.destroy()
             latestReading(true)
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°C")
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C")
             document.getElementById('hourly').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=4a3d784c-6c3a-48ab-8192-1dd90b7cc40a&theme=light"
             document.getElementById('daily').src = "https://charts.mongodb.com/charts-weather-station-v1-wwkqe/embed/charts?id=aa385c38-f6c6-41b5-8359-347afec16539&theme=light"
         }

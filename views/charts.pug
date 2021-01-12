@@ -46,121 +46,127 @@ html
     h4 Want to learn more about how the station works? #[a(href='/info') Click here]
 
 script.
-    window.onload = () => {
-        createLatestTable();
-        let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsF)})
-        temperatureGraphSetup(calcedMovingAvg, '°F', 'movingAvgTemperature')
-        if (window.localStorage.getItem('celsius') === 'true') {
-            document.getElementById('cels').checked = true
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C", 'temperatureChart');
-            latestReading(true)
-            document.getElementById('hourly').src = "url"
-            document.getElementById('daily').src = "url"
-        } else {
-            document.getElementById('faren').checked = true
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F", "temperatureChart")
-            latestReading(false)
-        }
-        humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
+  window.onload = () => {
+    createLatestTable();
+    if (window.localStorage.getItem('celsius') === 'true') {
+      document.getElementById('cels').checked = true
+      tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C", 'temperatureChart');
+      let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsC)})
+      tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°C', 'movingAvgTemperature')
+      latestReading(true)
+      document.getElementById('hourly').src = "url"
+      document.getElementById('daily').src = "url"
+    } else {
+      document.getElementById('faren').checked = true
+      tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F", "temperatureChart")
+      let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsF)})
+      tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°F', 'movingAvgTemperature')
+      latestReading(false)
     }
+    humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
+  }
 
-    document.getElementById('faren').addEventListener('click', () => {
-        try {
-            temperatureSlider.reset()
-            tempChart.destroy()
-            latestReading(false)
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F")
-            document.getElementById('hourly').src = "url"
-            document.getElementById('daily').src = "url"
-        }
-        finally {
-            window.localStorage.setItem('celsius', 'false')
-        }
-    })
-    document.getElementById('cels').addEventListener('click', () => {
-        try {
-            temperatureSlider.reset()
-            tempChart.destroy()
-            latestReading(true)
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C")
-            document.getElementById('hourly').src = "url"
-            document.getElementById('daily').src = "url"
-        }
-        finally {
-            window.localStorage.setItem('celsius', 'true')
-
-        }
-    })
-
-    function latestReading(celsius, reading = !{JSON.stringify(current)}) {
-        currentTime.innerHTML = new Date(reading[0].time).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})
-        if (celsius) {
-            currentTemperature.innerHTML = (toCelsius(reading[0].temperature).toFixed(1).toString() + "°C")
-        } else {
-            currentTemperature.innerHTML = (reading[0].temperature.toFixed(1).toString() + "°F")
-        }
-        currentHumidity.innerHTML = (reading[0].humidity.toFixed(1).toString() + "%")
+  document.getElementById('faren').addEventListener('click', () => {
+    try {
+      temperatureSlider.reset()
+      tempChart.destroy()
+      tempMAChart.destroy()
+      latestReading(false)
+      tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F", "temperatureChart")
+      let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsF)})
+      tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°F', 'movingAvgTemperature')
+      document.getElementById('hourly').src = "url"
+      document.getElementById('daily').src = "url"
+    } finally {
+      window.localStorage.setItem('celsius', 'false')
     }
+  })
+  document.getElementById('cels').addEventListener('click', () => {
+    try {
+      temperatureSlider.reset()
+      tempChart.destroy()
+      tempMAChart.destroy()
+      latestReading(true)
+      tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°C", "temperatureChart")
+      let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsC)})
+      tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°C', 'movingAvgTemperature')
+      document.getElementById('hourly').src = "url"
+      document.getElementById('daily').src = "url"
+    } finally {
+      window.localStorage.setItem('celsius', 'true')
 
-    var humiditySlider = document.getElementById('humidityTimeRange')
-    $("#humidityTimeRange").ionRangeSlider({
-        skin: 'big',
-        type: 'double',
-        min: 1,
-        max: 24,
-        from: 1,
-        to: 24,
-        min_interval: 1,
-        onChange: function (data) {
-            humChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
-            humChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
-            humChart.update()
+    }
+  })
 
-        }
-    })
-    $("#temperatureTimeRange").ionRangeSlider({
-        skin: 'big',
-        type: 'double',
-        min: 1,
-        max: 24,
-        from: 1,
-        to: 24,
-        min_interval: 1,
-        onChange: function (data) {
-            tempChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
-            tempChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
-            tempChart.update()
+  function latestReading(celsius, reading = !{JSON.stringify(current)}) {
+    currentTime.innerHTML = new Date(reading[0].time).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})
+    if (celsius) {
+      currentTemperature.innerHTML = (toCelsius(reading[0].temperature).toFixed(1).toString() + "°C")
+    } else {
+      currentTemperature.innerHTML = (reading[0].temperature.toFixed(1).toString() + "°F")
+    }
+    currentHumidity.innerHTML = (reading[0].humidity.toFixed(1).toString() + "%")
+  }
 
-        }
-    })
-    var temperatureSlider = $("#temperatureTimeRange").data("ionRangeSlider")
+  var humiditySlider = document.getElementById('humidityTimeRange')
+  $("#humidityTimeRange").ionRangeSlider({
+    skin: 'big',
+    type: 'double',
+    min: 1,
+    max: 24,
+    from: 1,
+    to: 24,
+    min_interval: 1,
+    onChange: function (data) {
+      humChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
+      humChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
+      humChart.update()
+
+    }
+  })
+  $("#temperatureTimeRange").ionRangeSlider({
+    skin: 'big',
+    type: 'double',
+    min: 1,
+    max: 24,
+    from: 1,
+    to: 24,
+    min_interval: 1,
+    onChange: function (data) {
+      tempChart.options.scales.xAxes[0].ticks.min = Date.now() - ((24 - data.from) * 60 * 60) * 1000
+      tempChart.options.scales.xAxes[0].ticks.max = Date.now() - ((24 - data.to) * 60 * 60) * 1000
+      tempChart.update()
+
+    }
+  })
+  var temperatureSlider = $("#temperatureTimeRange").data("ionRangeSlider")
 script.
-    function createLatestTable() {
-        currentStatsTable = document.getElementById('currentConditions')
-        currentTime = currentStatsTable.insertRow().insertCell(0)
-        currentTemperature = currentStatsTable.insertRow().insertCell(0)
-        currentHumidity = currentStatsTable.insertRow().insertCell(0)
+  function createLatestTable() {
+    currentStatsTable = document.getElementById('currentConditions')
+    currentTime = currentStatsTable.insertRow().insertCell(0)
+    currentTemperature = currentStatsTable.insertRow().insertCell(0)
+    currentHumidity = currentStatsTable.insertRow().insertCell(0)
 
-    }
+  }
 
-    function updateCurrent() {
-        let xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                if (window.localStorage.getItem('celsius') === 'true') {
-                    latestReading(true, JSON.parse(this.responseText))
-                } else {
-                    latestReading(false, JSON.parse(this.responseText))
-                }
-                document.getElementById('refreshCurrent').disabled = true
-                document.getElementById('refreshPleaseWait').style.display = 'block'
-                setTimeout(() => {
-                    document.getElementById('refreshCurrent').disabled = false
-                    document.getElementById('refreshPleaseWait').style.display = 'none'
-                }, 30000)
-            }
+  function updateCurrent() {
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        if (window.localStorage.getItem('celsius') === 'true') {
+          latestReading(true, JSON.parse(this.responseText))
+        } else {
+          latestReading(false, JSON.parse(this.responseText))
         }
-        xhr.open('GET', 'currentConditions')
-        xhr.send()
+        document.getElementById('refreshCurrent').disabled = true
+        document.getElementById('refreshPleaseWait').style.display = 'block'
+        setTimeout(() => {
+          document.getElementById('refreshCurrent').disabled = false
+          document.getElementById('refreshPleaseWait').style.display = 'none'
+        }, 30000)
+      }
     }
+    xhr.open('GET', 'currentConditions')
+    xhr.send()
+  }
 

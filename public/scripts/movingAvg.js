@@ -7,3 +7,13 @@ function ma10(arr) {
   }
   return movingAvg;
 }
+
+function maArraySetup(temps) {
+  let movingAvgTemps = [];
+  (temps).forEach((obs) => movingAvgTemps.push(obs.temperature));
+  movingAvgTemps = ma10(movingAvgTemps);
+  return (temps).map((obs, index) => ({
+    temperature: movingAvgTemps[index],
+    time: obs.time,
+  }));
+}

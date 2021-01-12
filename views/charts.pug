@@ -48,13 +48,7 @@ html
 script.
     window.onload = () => {
         createLatestTable();
-        let movingAvgTemps = [];
-        (!{JSON.stringify(tempsF)}).forEach(obs => movingAvgTemps.push(obs.temperature))
-        movingAvgTemps = ma10(movingAvgTemps)
-        let calcedMovingAvg = (!{JSON.stringify(tempsF)}).map((obs, index) => ({
-          temperature: movingAvgTemps[index],
-          time: obs.time
-        }))
+        let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsF)})
         temperatureGraphSetup(calcedMovingAvg, '°F', 'movingAvgTemperature')
         if (window.localStorage.getItem('celsius') === 'true') {
             document.getElementById('cels').checked = true

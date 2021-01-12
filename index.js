@@ -23,6 +23,10 @@ app.get('/', (req, res) => {
         tempsC: converted,
         humidities: stats[1],
         current: stats[2],
+        celsHourTempURL: process.env.celsHour,
+        celsDayTempURL: process.env.celsDay,
+        farHourTempURL: process.env.fahrenHour,
+        farDayTempURL: process.env.farhrenDay,
       });
     });
 });

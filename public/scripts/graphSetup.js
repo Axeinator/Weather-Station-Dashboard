@@ -4,8 +4,8 @@ function toCelsius(temp) {
   return (temp - 32) * (5 / 9);
 }
 
-function temperatureGraph(xArray, yArray, suffix) {
-  const ctx = document.getElementById('temperatureChart');
+function temperatureGraph(xArray, yArray, suffix, element) {
+  const ctx = document.getElementById(element);
   const data = {
     labels: xArray,
     datasets: [
@@ -112,12 +112,12 @@ function humidityGraph(xArray, yArray) {
   });
 }
 
-function temperatureGraphSetup(temps, suffix) {
+function temperatureGraphSetup(temps, suffix, element) {
   const xArray = [];
   temps.forEach((obs) => xArray.push(new Date(obs.time)));
   const yArray = [];
   temps.forEach((obs) => yArray.push(obs.temperature));
-  return temperatureGraph(xArray, yArray, suffix);
+  return temperatureGraph(xArray, yArray, suffix, element);
 }
 
 function humidityGraphSetup(humidity) {

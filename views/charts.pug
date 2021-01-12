@@ -11,6 +11,7 @@ html
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous" defer)
     link(rel='stylesheet' href='main.css')
     script(src='scripts/graphSetup.js' defer)
+    script(src='scripts/movingAvg.js')
 
     body
     h1 Weather Station - Houston, TX
@@ -30,6 +31,7 @@ html
         label(class="form-check-label" for="cels") Celsius
 
     canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
+    canvas(class='graph' id='movingAvgTemperature' width='50%' height='50vh')
 
     h2 Relative Humidity
     input(type="text" id="humidityTimeRange" name="timeRange")
@@ -46,15 +48,23 @@ html
 script.
     window.onload = () => {
         createLatestTable();
+        let movingAvgTemps = [];
+        (!{JSON.stringify(tempsF)}).forEach(obs => movingAvgTemps.push(obs.temperature))
+        movingAvgTemps = ma10(movingAvgTemps)
+        let calcedMovingAvg = (!{JSON.stringify(tempsF)}).map((obs, index) => ({
+          temperature: movingAvgTemps[index],
+          time: obs.time
+        }))
+        temperatureGraphSetup(calcedMovingAvg, '°F', 'movingAvgTemperature')
         if (window.localStorage.getItem('celsius') === 'true') {
             document.getElementById('cels').checked = true
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C");
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C", 'temperatureChart');
             latestReading(true)
             document.getElementById('hourly').src = "url"
             document.getElementById('daily').src = "url"
         } else {
             document.getElementById('faren').checked = true
-            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F")
+            tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F", "temperatureChart")
             latestReading(false)
         }
         humChart = humidityGraphSetup(!{JSON.stringify(humidities)});

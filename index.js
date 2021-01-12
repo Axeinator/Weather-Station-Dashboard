@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const data = require('./mongo');
+const { ma10 } = require('./public/scripts/movingAvg');
 
 const app = express();
 

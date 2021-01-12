@@ -39,15 +39,17 @@ html
     input(type="text" id="humidityTimeRange" name="timeRange")
     canvas(class='graph' id='humidityChart' width='50%' height='50vh')
     iframe(id='hourly' style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
-        width="100%" height="80%"
-        src="url")
+        width="100%" height="80%")
     iframe(id='daily' style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
-        width="100%" height="80%"
-        src="url")
+        width="100%" height="80%")
 
     h4 Want to learn more about how the station works? #[a(href='/info') Click here]
 
 script.
+  const celsHourTempURL = !{JSON.stringify(celsHourTempURL)}
+  const celsDayTempURL = !{JSON.stringify(celsDayTempURL)}
+  const farHourTempURL = !{JSON.stringify(farHourTempURL)}
+  const farDayTempURL = !{JSON.stringify(farDayTempURL)}
   window.onload = () => {
     createLatestTable();
     if (window.localStorage.getItem('celsius') === 'true') {
@@ -56,14 +58,16 @@ script.
       let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsC)})
       tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°C', 'movingAvgTemperature')
       latestReading(true)
-      document.getElementById('hourly').src = "url"
-      document.getElementById('daily').src = "url"
+      document.getElementById('hourly').src = celsHourTempURL
+      document.getElementById('daily').src = celsDayTempURL
     } else {
       document.getElementById('faren').checked = true
       tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F", "temperatureChart")
       let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsF)})
       tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°F', 'movingAvgTemperature')
       latestReading(false)
+      document.getElementById('hourly').src = farHourTempURL
+      document.getElementById('daily').src = farDayTempURL
     }
     humChart = humidityGraphSetup(!{JSON.stringify(humidities)});
   }
@@ -77,8 +81,8 @@ script.
       tempChart = temperatureGraphSetup(!{JSON.stringify(tempsF)}, "°F", "temperatureChart")
       let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsF)})
       tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°F', 'movingAvgTemperature')
-      document.getElementById('hourly').src = "url"
-      document.getElementById('daily').src = "url"
+      document.getElementById('hourly').src = farHourTempURL
+      document.getElementById('daily').src = farDayTempURL
     } finally {
       window.localStorage.setItem('celsius', 'false')
     }
@@ -92,8 +96,8 @@ script.
       tempChart = temperatureGraphSetup(!{JSON.stringify(tempsC)}, "°C", "temperatureChart")
       let calcedMovingAvg = maArraySetup(!{JSON.stringify(tempsC)})
       tempMAChart = temperatureGraphSetup(calcedMovingAvg, '°C', 'movingAvgTemperature')
-      document.getElementById('hourly').src = "url"
-      document.getElementById('daily').src = "url"
+      document.getElementById('hourly').src = celsHourTempURL
+      document.getElementById('daily').src = celsDayTempURL
     } finally {
       window.localStorage.setItem('celsius', 'true')
 

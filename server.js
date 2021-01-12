@@ -1,4 +1,3 @@
-//get rid of mongodb embeds in public repo
 const app = require('./index');
 
 const PORT = process.env.PORT || 8081;

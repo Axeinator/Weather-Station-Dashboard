@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 function ma10(arr) {
   const movingAvg = [];
   for (let i = 0; i < arr.length - 9; i += 1) {

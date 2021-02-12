@@ -6,44 +6,56 @@ html
         crossorigin="anonymous")
     link(rel='stylesheet'
         href='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/intro.js/3.3.1/introjs.min.css' integrity='sha512-631ugrjzlQYCOP9P8BOLEMFspr5ooQwY3rgt8SMUa+QqtVMbY/tniEUOcABHDGjK50VExB4CNc61g5oopGqCEw==' crossorigin='anonymous')
+    link(rel='stylesheet' href='main.css')
+
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js')
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous" defer)
-    link(rel='stylesheet' href='main.css')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/intro.js/3.3.1/intro.min.js' integrity='sha512-NC1GtvckWJQLUHrSQp5+4ydIv6gW8kfP4Ewrwv8Y1xU1h9GTTaXDTnWl+kjHcZNCaX8ySFNSpPmtt/B4SUaDsQ==' crossorigin='anonymous')
     script(src='scripts/graphSetup.js' defer)
     script(src='scripts/movingAvg.js')
 
     body
     h1 Weather Station - Houston, TX
     h2 Current Conditions
-    table(id='currentConditions' style="width: 50%")
+    table(id='currentConditions' style="width: 50%" data-intro="Take a look at the latest weather conditions.")
     div(class='row justify-content-center')
         button(id='refreshCurrent' class='btn btn-primary btn-lg' onclick='updateCurrent()') Refresh Reading
         p(id='refreshPleaseWait' style='display: none') Please wait before refreshing the reading again.
+        button(class="btn btn-secondary btn-lg" onclick="introJs().start()") Confused?
 
-    h2 Temperature
-    input(type="text" id="temperatureTimeRange" name="timeRange")
-    div(class="form-check form-check-inline" style="margin: 10px 45%")
+    div(class="form-check form-check-inline" style="margin: 10px 45%" data-intro="Choose whether you would like to view temperature in Celsius or Fahrenheit. Your preference will be saved.")
         input(class="form-check-input" type="radio" name="inlineRadioOptions" id="faren" value="Fahrenheit")
         label(class="form-check-label" for="faren") Fahrenheit
         br
         input(class="form-check-input" type="radio" name="inlineRadioOptions" id="cels" value="Celsius")
         label(class="form-check-label" for="cels") Celsius
 
-    canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
 
-    input(type="text" id="temperatureMATimeRange" name="timeRange")
+    div(data-intro="A smoothed temperature graph. Use this to view temperature trends for the past 24 hours. You can also move the two sides of this slider to zoom in on certain time periods.")
+        h2 Temperature (10 Period Moving Average)
+        p Note: 10 periods is approximately 20 minutes but may vary because of the sensor receiving invalid readings.
+        input(type="text" id="temperatureMATimeRange" name="timeRange")
     canvas(class='graph' id='movingAvgTemperature' width='50%' height='50vh')
 
-    h2 Relative Humidity
+    h2(data-intro="A raw temperature graph, recommended to detect sensor issues.") Temperature
+    input(type="text" id="temperatureTimeRange" name="timeRange")
+    canvas(class='graph' id='temperatureChart' width='50%' height='50vh')
+
+    h2(data-intro="A relative humidity graph, maximum is 100%, typically when it is raining.") Relative Humidity
     input(type="text" id="humidityTimeRange" name="timeRange")
     canvas(class='graph' id='humidityChart' width='50%' height='50vh')
+
+    h2(data-intro="These are hourly temperature averages for the past 24 hours.") Hourly Averages
     iframe(id='hourly' style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
         width="100%" height="80%")
+
+    h2(data-intro="These are daily temperature maximum and minimums for the previous 7 days.") Daily Max/Min
     iframe(id='daily' style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);"
         width="100%" height="80%")
 
-    h4 Want to learn more about how the station works? #[a(href='/info') Click here]
+    h4(data-intro="Learn more about the station setup here.") Want to learn more about how the station works? #[a(href='/info') Click here]
 
 script.
   const celsHourTempURL = !{JSON.stringify(celsHourTempURL)}

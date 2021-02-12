@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
         celsHourTempURL: process.env.celsHour,
         celsDayTempURL: process.env.celsDay,
         farHourTempURL: process.env.fahrenHour,
-        farDayTempURL: process.env.farhrenDay,
+        farDayTempURL: process.env.fahrenDay,
       });
     });
 });

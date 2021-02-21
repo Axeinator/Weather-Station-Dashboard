@@ -21,5 +21,3 @@ function dewPoint(temp, rh) {
   const denominator = beta - (ln(rh / 100) + ((beta * temp) / (lambda + temp)));
   return Math.round((numerator / denominator) * 10) / 10;
 }
-
-console.log(dewPoint(34.3, 82));

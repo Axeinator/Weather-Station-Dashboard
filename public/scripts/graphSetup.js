@@ -1,7 +1,11 @@
 /* eslint-disable no-undef, no-unused-vars */
 
 function toCelsius(temp) {
-  return (temp - 32) * (5 / 9);
+  return Math.round(((temp - 32) * (5 / 9)) * 10) / 10;
+}
+
+function toFahrenheit(temp) {
+  return Math.round(((temp * (9 / 5)) + 32) * 10) / 10;
 }
 
 function temperatureGraph(xArray, yArray, suffix, element) {

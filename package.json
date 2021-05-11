@@ -3,7 +3,7 @@
     "chart.js": "^2.9.4",
     "express": "^4.17.1",
     "mongodb": "^3.6.3",
-    "pug": "^3.0.0"
+    "pug": "^3.0.1"
   },
   "scripts": {
     "start": "node server.js",
